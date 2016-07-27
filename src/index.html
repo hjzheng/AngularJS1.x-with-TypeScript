@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>TypeScript + AngularJS 1.x 练习环境</title>
+    <!-- build:js lib.js -->
+    <script src="../node_modules/angular/angular.min.js"></script>
+    <script src="../node_modules/angular-resource/angular-resource.js"></script>
+    <script src="../node_modules/angular-ui-router/release/angular-ui-router.js"></script>
+    <!-- endbuild -->
+    <script src="./bundle.js"></script>
+    <!--templates.js-->
+    <link rel="stylesheet" href="./bundle.css">
+</head>
+<body ng-controller="MainCtrl">
+    {{name}}
+    <div ui-view></div>
+</body>
+</html>
