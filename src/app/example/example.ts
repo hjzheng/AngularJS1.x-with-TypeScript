@@ -1,3 +1,3 @@
 export class ExampleCtrl {
-    public title: String = "ExampleCtrl";
+    public title: string = "ExampleCtrl";
 }
