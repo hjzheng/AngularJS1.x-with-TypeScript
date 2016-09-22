@@ -2,18 +2,22 @@
 <html lang="en" ng-app="app">
 <head>
     <meta charset="UTF-8">
-    <title>TypeScript + AngularJS 1.x 练习环境</title>
+    <title>TypeScript + AngularJS 1.x</title>
+    <!-- build:css lib.css -->
+    <link rel="stylesheet" href="../node_modules/ccms-components/ccms-components.css">
+    <!-- endbuild -->
+    <link rel="stylesheet" href="./bundle.css">
     <!-- build:js lib.js -->
-    <script src="../node_modules/angular/angular.min.js"></script>
+    <script src="../node_modules/angular/angular.js"></script>
     <script src="../node_modules/angular-resource/angular-resource.js"></script>
     <script src="../node_modules/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="../node_modules/ccms-components/ccms-components.js"></script>
     <!-- endbuild -->
     <script src="./bundle.js"></script>
     <!--templates.js-->
-    <link rel="stylesheet" href="./bundle.css">
 </head>
-<body ng-controller="MainCtrl">
-    {{name}}
+<body ng-controller="MainCtrl as vm">
+    {{vm.name}}
     <div ui-view></div>
 </body>
 </html>
