@@ -1,17 +1,10 @@
 var gulp = require('gulp');
 var del = require('del');
-var gutil = require('gulp-util');
+var plugins = require('gulp-load-plugins')();
 var chalk = require('chalk');
-var useref = require('gulp-useref');
-var replace = require('gulp-replace');
-var watch = require('gulp-watch');
-var order = require('gulp-order');
-var concat = require('gulp-concat');
-var templateCache = require('gulp-angular-templatecache');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var tsify = require('tsify');
-var sourcemaps = require('gulp-sourcemaps');
 var buffer = require('vinyl-buffer');
 var browserSync = require('browser-sync');
 var proxyMiddleware = require('http-proxy-middleware');
@@ -31,15 +24,15 @@ gulp.task('clean', function() {
 
 gulp.task('copyHtml', function() {
     return gulp.src(config.pages)
-        .pipe(useref())
-        .pipe(replace('<!--templates.js-->', '<script src="templates.js"></script>'))
+        .pipe(plugins.useref())
+        .pipe(plugins.replace('<!--templates.js-->', '<script src="templates.js"></script>'))
         .pipe(gulp.dest('dist'));
 });
 
 gulp.task('buildCSS', ['copyHtml'], function() {
     return gulp.src(config.css)
-        .pipe(order(config.cssOrder))
-        .pipe(concat('bundle.css'))
+        .pipe(plugins.order(config.cssOrder))
+        .pipe(plugins.concat('bundle.css'))
         .pipe(gulp.dest('dist'))
         .pipe(browserSync.reload({stream: true}));
 });
@@ -47,7 +40,7 @@ gulp.task('buildCSS', ['copyHtml'], function() {
 function map_error(err) {
     if (err.fileName) {
         // regular error
-        gutil.log(chalk.red(err.name)
+        plugins.util.log(chalk.red(err.name)
             + ': '
             + chalk.yellow(err.fileName.replace(__dirname + '/src/js/', ''))
             + ': '
@@ -60,7 +53,7 @@ function map_error(err) {
             + chalk.blue(err.description))
     } else {
         // browserify error..
-        gutil.log(chalk.red(err.name)
+        plugins.util.log(chalk.red(err.name)
             + ': '
             + chalk.yellow(err.message))
     }
@@ -81,31 +74,31 @@ gulp.task('buildJS', ['copyHtml'], function () {
     .bundle().on("error", map_error)
     .pipe(source('bundle.js'))
     .pipe(buffer())
-    .pipe(sourcemaps.init({loadMaps: true}))
-    .pipe(sourcemaps.write('./'))
+    .pipe(plugins.sourcemaps.init({loadMaps: true}))
+    .pipe(plugins.sourcemaps.write('./'))
     .pipe(gulp.dest('dist'))
     .pipe(browserSync.reload({stream: true}));
 });
 
 
 gulp.task('watch', function() {
-	watch('src/**/*.ts', function() {
+	plugins.watch('src/**/*.ts', function() {
 		gulp.run('buildJS');
 	});
-    watch('src/**/*.css', function() {
+    plugins.watch('src/**/*.css', function() {
 		gulp.run('buildCSS');
 	});
-    watch('src/*.html', function() {
+    plugins.watch('src/*.html', function() {
 		gulp.run('copyHtml');
 	});
-	watch('src/app/*.html', function() {
+	plugins.watch('src/app/*.html', function() {
 		gulp.run('template');
 	});
 });
 
 gulp.task('template', function() {
 	return gulp.src(config.template)
-		.pipe(templateCache('templates.js', {'root': './src/app', 'module': 'app'}))
+		.pipe(plugins.angularTemplatecache('templates.js', {'root': './src/app', 'module': 'app'}))
 		.pipe(gulp.dest('dist'));
 });
 
